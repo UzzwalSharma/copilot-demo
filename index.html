@@ -116,7 +116,8 @@
 
     .add-button:focus-visible,
     .task-input:focus-visible,
-    .task-checkbox:focus-visible + .task-label {
+    .task-checkbox:focus-visible + .task-label,
+    .delete-button:focus-visible {
       outline: 3px solid rgba(91, 123, 80, 0.38);
       outline-offset: 3px;
     }
@@ -172,6 +173,23 @@
       font-size: 0.96rem;
       line-height: 1.45;
       cursor: pointer;
+    }
+
+    .delete-button {
+      flex: 0 0 auto;
+      padding: 6px 9px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: #73796f;
+      font: inherit;
+      font-size: 0.82rem;
+      cursor: pointer;
+    }
+
+    .delete-button:hover {
+      background: #f3e8e4;
+      color: #8a3f32;
     }
 
     .task-item.is-done .task-label {
@@ -293,7 +311,17 @@
       label.htmlFor = checkbox.id;
       label.textContent = taskText;
 
-      item.append(checkbox, label);
+      const deleteButton = document.createElement("button");
+      deleteButton.className = "delete-button";
+      deleteButton.type = "button";
+      deleteButton.textContent = "Delete";
+      deleteButton.setAttribute("aria-label", `Delete task: ${taskText}`);
+      deleteButton.addEventListener("click", () => {
+        item.remove();
+        updateTaskCount();
+      });
+
+      item.append(checkbox, label, deleteButton);
       list.append(item);
       input.value = "";
       input.focus();
